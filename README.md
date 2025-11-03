@@ -50,3 +50,34 @@ The data covers a two-year period, spanning from 2023 through 2024.
 The data covers a twe values are False or True
 
 
+<img width="913" height="373" alt="image" src="https://github.com/user-attachments/assets/172804fe-a65f-409e-8876-4de37b3225ac" />
+
+- K-Means is sensitive to the scale of features. Since Recency, Frequency, and Monetary have different ranges, we must standardize them (transform them to have a mean of 0 and a standard deviation of 1).
+
+-Determine the Optimal Number of Clusters (K):
+
+The Elbow Method is commonly used to find the best value for $K$ (the number of clusters). We plot the Within-Cluster Sum of Squares (WCSS) for a range of $K$ values. The 'elbow' point on the plot suggests the optimal $K$.
+
+The Silhouette Score quantifies how similar a data point is to its own cluster (cohesion) compared to other clusters (separation). It provides a measure of how well-defined and distinct the clusters are
+
+<img width="690" height="667" alt="image" src="https://github.com/user-attachments/assets/bd362fd3-4e5d-4e7b-8f29-1f0b1935d5ba" />
+
+
+- Cluster 2 (Green):  This cluster represents highly engaged and frequent customers with good spending. They have relatively low Recency, high Frequency, and moderate to high Monetary values. They are your most valuable customers.
+
+- Cluster 0 (Blue): This cluster represents less frequent or lower-value customers. They have moderate Recency, lower Frequency, and lower Monetary values compared to Cluster 2.
+
+- Cluster 1 (Pink): This cluster includes customers who haven't purchased as recently but still show some level of activity and spending. They show higher Recency compared to Clusters 0 and 2, with moderate Frequency and Monetary values. This group might include 'About to Sleep' or 'Hibernating' customers.
+
+- For Cluster 2 (Your Most Valuable Customers):
+Recommendation: Nurture these relationships. Implement an exclusive loyalty program with tiered rewards, personalized offers based on their preferences, and early access to new products or promotions. Provide excellent customer service and seek their feedback.
+Business Impact: Strengthens brand loyalty, encourages continued high-value purchases, and potentially turns them into brand advocates.
+
+- For Cluster 0 (Less Frequent / Lower-Value Customers):
+Recommendation: Consider low-cost strategies to encourage activity, such as general promotional emails or highlighting accessible entry-level products. Focus efforts more on acquiring and nurturing customers in higher-value segments.
+ Business Impact: May yield some incremental sales, but the primary focus should be on higher-potential segments.
+
+- For Cluster 1 (Potentially At-Risk / Hibernating Customers):
+Recommendation: Develop targeted re-engagement campaigns. Send personalized emails with special discounts or promotions to entice them back. Consider reaching out through different channels. A win-back survey might help understand why they stopped purchasing.
+Business Impact:  Potentially recovers lost revenue and reduces customer churn.
+

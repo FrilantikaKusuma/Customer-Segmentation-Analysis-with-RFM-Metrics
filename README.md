@@ -1,4 +1,4 @@
-## Customer-Segmentation-Analysis-with-RFM-Metrics
+# Customer-Segmentation-Analysis-with-RFM-Metrics
 
 <img width="1262" height="998" alt="pngimg com - mug_coffee_PNG16824" src="https://github.com/user-attachments/assets/fc2757b7-9ae6-4d7d-9ccc-a068ab82f0c2" />
 
@@ -16,14 +16,14 @@
 - Discount Impact: Is the current approach to offering a discount
 - How to handle the customers that have an issue to leave and how to engage the loyal customer to be the lifetime customer and show the best business recomendation for a better business growth
 
-## 📝 Dataset Specification
+### 📝 Dataset Specification
 
 This dataset comprises 730 records across 11 columns. It is confirmed that the dataset is clean,
  featuring no missing values, no duplicate entries and the distribution of outliers seems normal.
 
 Key Dimensions:
 
-## 📍 City (Transaction Location): The dataset includes transactions conducted across 10 distinct cities:
+### 📍 City (Transaction Location): The dataset includes transactions conducted across 10 distinct cities:
 
   Hail,
 Riyadh,
@@ -36,7 +36,7 @@ Buraidah,
 Abha,
 Tabuk.
 
-## 🫘 Product (Coffee Bean Origin): The product column details the origin country of the coffee beans being sold:
+### 🫘 Product (Coffee Bean Origin): The product column details the origin country of the coffee beans being sold:
 
   Costa Rica,
 Colombian,

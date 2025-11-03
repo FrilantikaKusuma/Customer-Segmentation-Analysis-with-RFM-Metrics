@@ -1,4 +1,4 @@
-# Customer-Segmentation-Analysis-with-RFM-Metrics
+### Customer-Segmentation-Analysis-with-RFM-Metrics
 
 ☕ The modern coffee market is highly competitive, requiring businesses to make data-driven decisions to optimize their operations and maximize profit margins. 
 
@@ -16,7 +16,7 @@ Specifically, the primary problem to be addressed through data analysis is the a
 - Discount Impact: Is the current approach to offering a discount
 - How to handle the customers that have an issue to leave and how to engage the loyal customer to be the lifetime customer and show the best business recomendation for a better business growth
 
-Dataset Specification
+### Dataset Specification
 
 This dataset comprises 730 records across 11 columns. It is confirmed that the dataset is clean,
  featuring no missing values, no duplicate entries and the distribution of outliers seems normal.
@@ -37,16 +37,16 @@ Tabuk.
 
 - Product (Coffee Bean Origin): The product column details the origin country of the coffee beans being sold:
 
-Costa Rica,
+  Costa Rica,
 Colombian,
 Brazilian,
 Guatemala,
 Ethiopian.
 
-Time Span:
+- Time Span:
 The data covers a two-year period, spanning from 2023 through 2024.
 
-Used Discount:
+- Used Discount:
 The data covers a twe values are False or True
 
 

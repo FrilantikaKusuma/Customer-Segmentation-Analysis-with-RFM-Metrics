@@ -24,24 +24,24 @@ This dataset comprises 730 records across 11 columns. It is confirmed that the d
 Key Dimensions:
 - City (Transaction Location): The dataset includes transactions conducted across 10 distinct cities:
 
-  Hail
-Riyadh
-Jeddah
-Mecca
-Khobar
-Dammam
-Medina
-Buraidah
-Abha
-Tabuk
+  Hail,
+Riyadh,
+Jeddah,
+Mecca,
+Khobar,
+Dammam,
+Medina,
+Buraidah,
+Abha,
+Tabuk.
 
 - Product (Coffee Bean Origin): The product column details the origin country of the coffee beans being sold:
 
-Costa Rica
-Colombian
-Brazilian
-Guatemala
-Ethiopian
+Costa Rica,
+Colombian,
+Brazilian,
+Guatemala,
+Ethiopian.
 
 Time Span:
 The data covers a two-year period, spanning from 2023 through 2024.

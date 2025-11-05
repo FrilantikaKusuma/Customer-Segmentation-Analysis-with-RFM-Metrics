@@ -7,11 +7,9 @@ import plotly.express as px
 import numpy as np
 from datetime import timedelta
 import seaborn as sns
-
 # --- Data Aggregation ---
 # Load Data
 df = pd.read_csv("DatasetForCoffeeSales2.csv")
-
 # Dataset Columns
 # - Date: Purchase date
 # - Customer_ID: Unique customer identifier
@@ -23,70 +21,52 @@ df = pd.read_csv("DatasetForCoffeeSales2.csv")
 # - Used_Discount: Whether a discount was applied (True/False)
 # - Discount_Amount: Discount value applied (20%)
 # - Final Sales : Sales After Discount
-
 df.head(10)
-
 # data describe
 df.describe()
-
 # data shape
 df.shape
-
 # check missing data
 df.isnull().sum()
-
 # check duplicate data
 df.duplicated().sum()
-
 # Grouping column by numerical and categorical
 num_col= ["Unit Price", "Quantity", "Sales Amount", "Used_Discount", "Discount_Amount", "Final Sales"]
 cat_col= ["City", "Category", "Product"]
-
 # Visualization for categorical columns
 for i, col in enumerate(cat_col):
     plt.figure(figsize= (10, 18))
     plt.subplot(3, 1, i+1)
     sns.countplot(data= df, y= col)
 plt.show()
-
 df['City'].value_counts()
-
 df['Used_Discount'].value_counts()
-
 df['Discount_Amount'].value_counts()
-
 df['Product'].value_counts()
-
 df["Date"] = pd.to_datetime(df["Date"])
 df["Day"] = df["Date"].dt.day
 df["Month"] = df["Date"].dt.month
 df["Year"] = df["Date"].dt.year
-
 # check outliers
 plt.figure(figsize= (20, 18))
 for i, col in enumerate(num_col):
     plt.subplot(3, 2, i+1)
     sns.boxplot(df[col])
 plt.show()
-
 # Ensure Boolean Column is in correct format
 if df ['Used_Discount'].dtype != bool:
     df['Used_Discount'] = df['Used_Discount'].astype(bool)
-
 df_yearly = df.groupby(df["Date"].dt.to_period("Y"))["Final Sales"].sum()
 print(df_yearly)
-
 # check sales per month
 df_monthly = df.groupby(df["Date"].dt.to_period("M"))["Final Sales"].sum()
 print(df_monthly)
-
 # check sales per year
 plt.figure(figsize=(8,5))
 sns.barplot(x=df_yearly.index, y=df_yearly.values, palette="rocket")
 plt.title("Sales per Year")
 plt.xlabel("Total Sales")
 plt.show
-
 # Plot sales trend per monthly
 plt.figure(figsize=(12,6))
 df_monthly.plot(kind="line", marker="o", color="darkmagenta")
@@ -95,11 +75,9 @@ plt.xlabel("Month")
 plt.ylabel("Total Sales")
 plt.grid()
 plt.show()
-
 # Check Sales by Product
 top_products = df.groupby("Product")["Final Sales"].sum().sort_values(ascending=False)
 print(top_products)
-
 # plot top products
 plt.figure(figsize=(8,5))
 sns.barplot(x=top_products.values, y=top_products.index, palette="tab20")
@@ -107,17 +85,13 @@ plt.title("Top-Selling-Coffee_Beans")
 plt.xlabel("Total Sales")
 plt.ylabel("Product")
 plt.show()
-
 # Check Quantity sold by product
 Quantity_products = df.groupby("Product")["Quantity"].sum().sort_values(ascending=False)
 print(Quantity_products)
-
 # Check top customers purchases
 top_customers = df.groupby("Customer_ID")["Final Sales"].sum().sort_values(ascending=False)
 top_10_customers = top_customers.head(10)
-
 top_10_customers
-
 # plot top Customers by total purchases
 plt.figure(figsize=(8,5))
 sns.barplot(x=top_10_customers.index, y=top_10_customers.values, palette="Paired")
@@ -125,12 +99,10 @@ plt.title("Top 10 Customers by Total Purchases")
 plt.xlabel("Total Sales")
 plt.ylabel("Customer ID")
 plt.show()
-
 # check purchase frequency
 Purchase_Frequency = df.groupby("Customer_ID")["Customer_ID"].count().sort_values(ascending=False)
 top_10_Purchase_frequency=Purchase_Frequency.head(10)
 top_10_Purchase_frequency
-
 # plot top 10 customers by purchase frequency
 plt.figure(figsize=(8,5))
 sns.barplot(x=top_10_Purchase_frequency.index, y=top_10_Purchase_frequency.values, palette="Accent")
@@ -138,21 +110,17 @@ plt.title("Top 10 Customers by Purchase Frequency")
 plt.xlabel("Purchase Frequency")
 plt.ylabel("Customer ID")
 plt.show()
-
 # Compare sales with and without discount
 discount_usage = df.groupby("Used_Discount")["Final Sales"].sum()
 discount_usage
-
 # Plot Discount Usage
 discount_usage.plot(kind="pie", autopct="%1.1f%%", colors=["cadetblue", "thistle"])
 plt.title("Sales Contribution - Discount vs No Discount")
 plt.ylabel("")
 plt.show()
-
 # check total sales by city
 City_Total_Sales = df.groupby("City")["Final Sales"].sum().sort_values(ascending=False)
 City_Total_Sales
-
 # Plot top city
 plt.figure(figsize=(8,5))
 sns.barplot(x=City_Total_Sales.index, y=City_Total_Sales.values, palette="Dark2")
@@ -160,64 +128,48 @@ plt.title("Top City by Total Sales")
 plt.xlabel("Total Sales")
 plt.ylabel("City")
 plt.show()
-
 # Plot percentage of the origin of customer
 Customer_Locations = df.groupby(['City'])['Customer_ID'].count().sort_values(ascending=False)
 Customer_Locations.plot(kind="pie", autopct="%1.1f%%")
 plt.title("The Origin of Customer")
 plt.ylabel("")
 plt.show()
-
 # check the most customers from
-
 Customer_Locations = df.groupby(['City'])['Customer_ID'].count().sort_values(ascending=False)
 Customer_Locations
-
 # Determine the present date
 # Convert 'Date' column to datetime objects
 df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-
 # Define a recent date (one day after the latest transaction)
 present_date = df['Date'].max() + timedelta(days=1)
 print(present_date)
-
 # Calculate Recency
 recency = df.groupby('Customer_ID')['Date'].agg(lambda date: (present_date - date.max()).days).reset_index()
-
 recency.rename(columns={'Date': 'Recency'}, inplace=True)
 recency.head()
-
 # Check boxplot of recency
 sns.boxplot(recency['Recency'])
-
 # Calculate Frequency and Monetary
 frequency_monetary = df.groupby('Customer_ID').agg(
     Frequency=('Date', 'count'),
     Monetary=('Final Sales', 'sum')
 ).reset_index()
-
 frequency_monetary.head()
-
 # Check transaction
 df[df['Customer_ID']==2]
-
 # Merge Recency with Frequency and Monetary
 data = recency.merge(frequency_monetary)
 data.head()
-
 # Check the percent rank
 def percent_rank(series):
   return series.rank(pct=True)
-
 # Calculate the percentile
 data['RecencyPercentile'] = percent_rank(-data['Recency'])
 data['FrequencyPercentile'] = percent_rank(data['Frequency'])
 data['MonetaryPercentile'] = percent_rank(data['Monetary'])
 data.head()
-
 # Check plot of Percentile
 sns.boxplot(data['RecencyPercentile'])
-
 # Create Conditions
 def calculate_score(percentile):
   if percentile >= 0.8:
@@ -230,13 +182,10 @@ def calculate_score(percentile):
     return 2
   else:
     return 1
-
 data['RecencyScore'] = data['RecencyPercentile'].apply(calculate_score)
 data['FrequencyScore'] = data['FrequencyPercentile'].apply(calculate_score)
 data['MonetaryScore'] = data['MonetaryPercentile'].apply(calculate_score)
-
 data.head()
-
 # Create Segmentation
 def rfm_segmentation(df):
   conditions = [
@@ -250,7 +199,6 @@ def rfm_segmentation(df):
       (df['RecencyScore'] == 2) & (df['FrequencyScore'] <= 2),
       (df['RecencyScore'] == 2) & (df['FrequencyScore'] == 5)
   ]
-
   choices = [
       'Champions',
       'Loyal Customers',
@@ -262,25 +210,19 @@ def rfm_segmentation(df):
       'Hibernating',
       'Cannot Lose Them'
   ]
-
   df['Segment'] = np.select(conditions, choices, default='Other')
   return df
-
 # Check segmentation
 data = rfm_segmentation(data)
 data.head()
-
 # Calculate customer per segment
 data.Segment.value_counts()
-
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
 import numpy as np
-
 # Visualization
-
 def create_3d_rfm_plot(df):
     fig = px.scatter_3d(df,
                         x='RecencyScore',
@@ -296,7 +238,6 @@ def create_3d_rfm_plot(df):
                         hover_data=['Segment'],
                         opacity=0.7,
                         size_max=10)
-
     fig.update_layout(
         scene=dict(
             xaxis_title='Recency Score',
@@ -311,10 +252,8 @@ def create_3d_rfm_plot(df):
         height=600,
         title_x=0.5
     )
-
     fig.show()
     return fig
-
 def create_enhanced_3d_rfm_plot(df):
     color_map = {
         'Champions': '#1f77b4',
@@ -328,21 +267,15 @@ def create_enhanced_3d_rfm_plot(df):
         'Cannot Lose Them': '#bcbd22',
         'Others': '#17becf'
     }
-
     segment_counts = df['Segment'].value_counts()
     max_count = segment_counts.max()
     min_count = segment_counts.min()
-
     fig = go.Figure()
-
     for segment in df['Segment'].unique():
         segment_data = df[df['Segment'] == segment]
         count = segment_counts[segment]
-
         marker_size = 3 + (count - min_count) / (max_count - min_count) * 12
-
         opacity = 0.4 + (count - min_count) / (max_count - min_count) * 0.5
-
         fig.add_trace(go.Scatter3d(
             x=segment_data['RecencyScore'],
             y=segment_data['FrequencyScore'],
@@ -364,7 +297,6 @@ def create_enhanced_3d_rfm_plot(df):
             '<extra></extra>',
             text=[f"{segment} ({count})"] * len(segment_data)
         ))
-
     fig.update_layout(
         title={
             'text': '3D RFM Customer Segmentation Analysis',
@@ -408,10 +340,8 @@ def create_enhanced_3d_rfm_plot(df):
             borderwidth=1
         )
     )
-
     fig.show()
     return fig
-
 def create_rfm_dashboard(df):
     fig = make_subplots(
         rows=2, cols=2,
@@ -420,7 +350,6 @@ def create_rfm_dashboard(df):
         subplot_titles=('3D RFM Analysis', 'Recency vs Frequency', 'Recency vs Monetary'),
         vertical_spacing=0.1
     )
-
     for segment in df['Segment'].unique():
         segment_data = df[df['Segment'] == segment]
         fig.add_trace(
@@ -435,10 +364,8 @@ def create_rfm_dashboard(df):
             ),
             row=1, col=1
         )
-
     for segment in df['Segment'].unique():
         segment_data = df[df['Segment'] == segment]
-
         fig.add_trace(
             go.Scatter(
                 x=segment_data['RecencyScore'],
@@ -450,7 +377,6 @@ def create_rfm_dashboard(df):
             ),
             row=2, col=1
         )
-
         fig.add_trace(
             go.Scatter(
                 x=segment_data['RecencyScore'],
@@ -462,15 +388,12 @@ def create_rfm_dashboard(df):
             ),
             row=2, col=2
         )
-
     fig.update_layout(height=800, title_text="RFM Analysis Dashboard")
     fig.show()
-    return fig
-
+    return fi
 def create_rfm_bucket_plot(df):
     # Create RFM bucket combinations
     df['RFM_Bucket'] = df['RecencyScore'].astype(str) + df['FrequencyScore'].astype(str) + df['MonetaryScore'].astype(str)
-
     bucket_stats = df.groupby('RFM_Bucket').agg({
         'RecencyScore': 'mean',
         'FrequencyScore': 'mean',
@@ -478,22 +401,17 @@ def create_rfm_bucket_plot(df):
         'Segment': 'first'
     }).reset_index()
     bucket_stats['Count'] = df['RFM_Bucket'].value_counts().values
-
     color_map = {
         'Champions': '#1f77b4', 'Loyal Customers': '#2ca02c', 'New Customers': '#ff7f0e',
         'Big Spenders': '#d62728', 'Promising': '#9467bd', 'About to Sleep': '#8c564b',
         'At Risk': '#e377c2', 'Hibernating': '#7f7f7f', 'Cannot Lose Them': '#bcbd22',
         'Others': '#17becf'
     }
-
     max_count = bucket_stats['Count'].max()
     min_count = bucket_stats['Count'].min()
-
     bucket_stats['Size'] = 5 + (bucket_stats['Count'] - min_count) / (max_count - min_count) * 25
     bucket_stats['Opacity'] = 0.5 + (bucket_stats['Count'] - min_count) / (max_count - min_count) * 0.4
-
     fig = go.Figure()
-
     for _, row in bucket_stats.iterrows():
         fig.add_trace(go.Scatter3d(
             x=[row['RecencyScore']],
@@ -517,7 +435,6 @@ def create_rfm_bucket_plot(df):
             text=[row['RFM_Bucket']],
             showlegend=False
         ))
-
     segments_in_data = bucket_stats['Segment'].unique()
     for segment in segments_in_data:
         fig.add_trace(go.Scatter3d(
@@ -532,7 +449,6 @@ def create_rfm_bucket_plot(df):
             showlegend=True,
             hoverinfo='skip'
         ))
-
     fig.update_layout(
         title={
             'text': 'RFM Buckets - Size & Opacity by Customer Count',
@@ -550,33 +466,23 @@ def create_rfm_bucket_plot(df):
         ),
         width=900, height=700
     )
-
     fig.show()
     return fig, bucket_stats
-
 # Basic 3D plot
 fig1 = create_3d_rfm_plot(data)
-
 # Enhanced 3D plot with size/opacity based on segment counts
 # fig2 = create_enhanced_3d_rfm_plot(data)
-
 # RFM bucket visualization with size based on exact bucket counts
 # fig3, bucket_data = create_rfm_bucket_plot(data)
-
 # Complete dashboard with multiple views
 # fig4 = create_rfm_dashboard(data)
-
 # To save the plot as HTML (optional)
 # fig.write_html("rfm_3d_analysis.html")
-
 ## K-Means Clustering
-
 # Calculate the `Length`, `Recency`, `Frequency`, and `Monetary` metrics.
-
 df_agg = df.groupby('Customer_ID').agg({'Date' : ['nunique', 'min', 'max'], 
                                               'Unit Price' : 'sum'
                                               }).reset_index()
-
 df_agg.columns = df_agg.columns.map('_'.join)
 df_agg.rename({'Date_nunique' : 'count_visit',
                'Date_min' : 'first_visit',
@@ -586,124 +492,78 @@ df_agg.rename({'Date_nunique' : 'count_visit',
               }, 
                 inplace= True, axis = 1
                 )
-
 df_agg
-
 # calculate the Periodicity metric
 df_agg_2 = df[['Customer_ID', 'Date']].drop_duplicates().sort_values(['Customer_ID', 'Date'])
-
 df_agg_2['lag_date'] = df_agg_2.groupby('Customer_ID')['Date'].shift(1)
-
 # Drop NaN Value
 df_agg_2.dropna(subset = ['lag_date'], inplace = True)
-
 df_agg_2['interval_day'] = (df_agg_2['Date'] - df_agg_2['lag_date']).dt.days
-
 df_agg_2 = df_agg_2.groupby('Customer_ID').agg({'interval_day' : 'median'}).reset_index()
-
 df_agg_2.rename({'interval_day' : 'periodicity'}, axis = 1, inplace = True)
-
 df_agg_2.head
-
 # combine both dataframe to the complete LRFM value for each customer
-
 df_final = df_agg.merge(df_agg_2, how = 'left', on = 'Customer_ID')
-
 df_final = df_final[['Customer_ID', 'length', 'recency', 'frequency', 'monetary', 'periodicity']]
-
 df_final.set_index('Customer_ID', inplace = True)
-
 df_final
-
 # Drop the Nan Value
-
 df_final[ df_final.periodicity.isnull() ].head()
-
 # Scaling Variable
-
 scaler = StandardScaler()
-
 df_scaled_clean = scaler.fit_transform(df_final)
-
 df_scaled_clean[0:5]
-
 # Segmenting Customers
-
 ## Clustering with LRFMP
-
 ### Determine Number of Clusters
-
 il_score = np.zeros(20)
 wss_score = np.zeros(20)
-
 for i in range(1, 20):
-  
   x = i + 1
-  
   # Cluster the data
   clust_temp = KMeans(n_clusters=x, random_state=123, n_init="auto").fit(df_scaled_clean)
   labels = clust_temp.labels_
-  
   # Calculate Silhouette Score
   sil_score[i] = silhouette_score(df_scaled_clean, labels, metric = 'euclidean')
-  
   # Calculate Within Sum of Square
   wss_score[i] = clust_temp.inertia_
-  
 trial_clust = pd.DataFrame({'n_cluster' : pd.to_numeric(list(range(1, 20))) + 1,
                             'silhouette_score' : sil_score[1:],
                             'wss_score' : wss_score[1:]
                             })
-
 # Highlight Optimal Number of Cluster
 p_1 = trial_clust[ trial_clust.silhouette_score == trial_clust.silhouette_score.max()]
-
 # Check Optimal Silhouette Score
-
 plt.plot(trial_clust.n_cluster.astype("str"), trial_clust.silhouette_score)
 plt.scatter(p_1.n_cluster.astype("str"), p_1.silhouette_score, s = 100)
 plt.xlabel("Number of Cluster") 
 plt.ylabel("Silhouette Score")
-
 plt.show()
-
 # Check Optimal K from Elbow Method
-
 plt.plot(trial_clust.n_cluster.astype("str"), trial_clust.wss_score)
 plt.scatter(trial_clust.n_cluster.astype("str"), trial_clust.wss_score, s = 10)
 plt.xlabel("Number of Cluster") 
 plt.ylabel("Within Sum of Square")
-
 plt.show()
 plt.close()
-
 # Clustering
 k_clust = KMeans(n_clusters=3, random_state=123, n_init="auto").fit(df_scaled_clean)
-
 list_cluster = pd.DataFrame({'Customer_ID' : list(df_final.index), 'cluster' : k_clust.labels_})
-
 df_out = df_final.reset_index().merge(list_cluster, how = 'left', on = 'Customer_ID')
-
 df_out
-
 # Profiling Customer
-
 summary_1 = df_out.groupby('cluster').agg({'Customer_ID' : 'nunique',
                                            'length' : 'mean',
                                            'recency' : 'mean',
                                            'frequency' : 'mean',
                                            'monetary' : 'mean',
                                            'periodicity' : 'mean'
-                                           })
-                                           
+                                           })                                        
 summary_1['percent_member'] = summary_1['Customer_ID']/summary_1['Customer_ID'].sum()
 summary_1.sort_values('Customer_ID', ascending = False)
-
 import plotly.express as px
 import plotly.graph_objects as go
-
 fig = go.Figure()
-
 # Add individual customer data points, with legend entries
 for cluster_id in sorted(df_out['cluster'].unique()):
     cluster_data = df_out[df_out['cluster'] == cluster_id]
@@ -724,8 +584,6 @@ for cluster_id in sorted(df_out['cluster'].unique()):
                   'Monetary: ' + cluster_data['monetary'].round(2).astype(str),
         hoverinfo='text'
     ))
-
-
 fig.update_layout(
     title={
         'text': '3D Visualization of Customer Segmentation (RFM)',
